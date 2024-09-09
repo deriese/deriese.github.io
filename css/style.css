@@ -2,8 +2,9 @@
 body {
     margin: 0;
     line-height: 1.5em;
-    color: #333333;
-    font-family: helvetica, arial, sans-serif;
+    color: #080706;
+    font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+    background: #fefcfb;
 }
 
 img {
@@ -13,7 +14,7 @@ img {
 
 h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0;
-    line-height: 1.2em;
+    line-height: 1.6em;
     margin-top: 1em;
 }
 
@@ -40,7 +41,7 @@ nav section, header section, main, footer section {
 /* Navigation panel */
 nav {
     background: #333333;
-    border-bottom: thin solid #111111;
+    border-bottom: thin solid #080706;
     line-height: 3em;
 }
 
