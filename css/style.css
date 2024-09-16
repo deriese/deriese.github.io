@@ -1,8 +1,8 @@
 /* General */
 body {
     margin: 0em;
-    line-height: 1.5;
-    font-size: 1.1em;
+    line-height: 1.6;
+    font-size: 18px;
     color: #080706;
     font-family: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
     background: #fefcfb;
@@ -15,7 +15,7 @@ img {
 
 h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-top: 1em;
 }
 
@@ -32,7 +32,7 @@ a:hover, a:active {
 
 /* Single column layout */
 nav section, header section, main, footer section {
-    max-width: 40em;
+    max-width: 640px;
     margin-left: auto;
     margin-right: auto;
     padding: 0 0.5em;
