@@ -21,12 +21,12 @@ h1, h2, h3, h4, h5, h6 {
 
 a:link, a:visited {
     color: #0000e0;
-    text-decoration: none
+    text-decoration: none;
 }
 
 a:hover, a:active {
     color: #0000ff;
-    text-decoration: underline
+    text-decoration: underline;
 }
 
 
@@ -51,7 +51,7 @@ nav a {
 }
 
 nav a:link, nav a:visited {
-    color: #cccccc;
+    color: #fefcfb;
 }
 
 nav a:hover, nav a:active {
@@ -149,4 +149,47 @@ div .more {
 
 .rss:hover, .rss:active {
     background: #ff8822;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #fefcfb;
+        background: #080706;
+    }
+
+    nav {
+        background: #333333;
+        border-bottom: thin solid #fefcfb;
+    }
+
+    nav a:link, nav a:visited {
+        color: #fefcfb;
+    }
+
+    nav a:hover, nav a:active {
+        color: #cccccc;
+    }
+
+    footer {
+        background: #080706;
+        border-top: thin solid #333333;
+        box-shadow: 0 100vh 0 100vh #080706;
+    }
+
+    article h2 a:link, article h2 a:visited,
+    article h1 a:link, article h1 a:visited,
+    .more:link, .more:visited {
+        color: #fefcfb;
+    }
+
+    article h2 a:hover, article h2 a:active,
+    article h1 a:hover, article h1 a:active,
+    .more:hover, .more:active {
+        color: #cccccc;
+    }
+
+    p.meta {
+        color: #cccccc;
+    }
 }
