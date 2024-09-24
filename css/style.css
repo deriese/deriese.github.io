@@ -192,4 +192,14 @@ div .more {
     p.meta {
         color: #cccccc;
     }
+    
+    a:link, a:visited {
+        color: #8888c8;
+        text-decoration: none;
+    }
+
+    a:hover, a:active {
+        color: #8888ff;
+        text-decoration: underline;
+    }
 }
