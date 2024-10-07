@@ -183,9 +183,11 @@
             bottomThird.style.opacity = '1';
             bottomThird.style.visibility = 'visible';
 
+            // Audio
             audioControl.style.opacity = '0';
             audioControl.style.visibility = 'hidden';
             audioPlayer.pause();
+            audioControl.innerHTML = "&#9658;"; // Change to play icon
 
             setTimeout(() => {
                 fullImage1.style.opacity = '0';
