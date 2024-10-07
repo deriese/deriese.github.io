@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Image Layout</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            overflow: hidden; /* Prevent canvas extension */
+            position: relative;
+        }
+
+        .image-section {
+            width: 100%;
+            height: 33.33vh; /* One third of the viewport height */
+            background-size: cover;
+            background-position: center;
+            z-index: 2; /* Cropped images are on top initially */
+            transition: opacity 0.9s ease-in-out; /* Smooth movement */
+            cursor: pointer;
+            position: relative; /* For positioning labels inside */
+        }
+        
+        .label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 2rem;
+            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+        }
+
+        /* Align the top, middle, and bottom thirds of the cropped images */
+        #top-third {
+            background-image: url('top_third_image1.jpg');
+            background-position: top; /* Align top image with the top */
+        }
+
+        #middle-third {
+            background-image: url('middle_third_image2.jpg');
+            background-position: center; /* Middle image stays centered */
+        }
+
+        #bottom-third {
+            background-image: url('bottom_third_image3.jpg');
+            background-position: bottom; /* Align bottom image with the bottom */
+        }
+
+        /* Full images stacked behind */
+        .full-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            z-index: 1; /* Behind the cropped images initially */
+            opacity: 0;
+            visibility: hidden;
+            transition: none; /* Appear instantly without fading */
+        }
+
+        /* Align full images to match the thirds' positions */
+        #full-image1 {
+            background-image: url('full_image1.jpg');
+            background-position: top; /* Align full image with top */
+        }
+
+        #full-image2 {
+            background-image: url('full_image2.jpg');
+            background-position: center; /* Align full image in the center */
+        }
+
+        #full-image3 {
+            background-image: url('full_image3.jpg');
+            background-position: bottom; /* Align full image with bottom */
+        }
+
+        /* Back button styling */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 36px;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 3;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out;
+        }
+
+        .audio-controls {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            font-size: 36px;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cropped thirds of images -->
+    <div id="top-third" class="image-section"><div class="label">Motivate</div></div>
+    <div id="middle-third" class="image-section"><div class="label">Concentrate</div></div>
+    <div id="bottom-third" class="image-section"><div class="label">Relax</div></div>
+
+    <!-- Full images hidden behind the cropped sections -->
+    <div id="full-image1" class="full-image"></div>
+    <div id="full-image2" class="full-image"></div>
+    <div id="full-image3" class="full-image"></div>
+
+    <!-- Back button -->
+    <button id="back-button" class="back-button">&lt;</button>
+
+    <!-- Single Audio Player -->
+    <audio id="audio-player" src="" preload="auto"></audio>
+
+    <!-- Audio Control (appears after an image is clicked) -->
+    <button id="audio-control" class="audio-controls" style="opacity: 0; visibility: hidden;">&#9658;</button>
+
+    <script>
+        // Get references to the cropped sections, full images, and back button
+        const topThird = document.getElementById('top-third');
+        const middleThird = document.getElementById('middle-third');
+        const bottomThird = document.getElementById('bottom-third');
+
+        const fullImage1 = document.getElementById('full-image1');
+        const fullImage2 = document.getElementById('full-image2');
+        const fullImage3 = document.getElementById('full-image3');
+
+        const backButton = document.getElementById('back-button');
+
+        const audioControl = document.getElementById('audio-control');
+        const audioPlayer = document.getElementById('audio-player');
+
+        // Define audio sources for each section
+        const audioSources = {
+                    top: 'motivation.mp3',
+                    middle: 'concentration.mp3',
+                    bottom: 'relaxation.mp3'
+                };
+
+        function toggleAudio() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                audioControl.innerHTML = "&#10074;&#10074;"; // Change to pause icon
+            } else {
+                audioPlayer.pause();
+                audioControl.innerHTML = "&#9658;"; // Change to play icon
+            }
+        }
+
+        // Function to reset all sections to the default state
+        function resetSections() {
+            topThird.style.transform = 'translateY(0)';
+            middleThird.style.transform = 'translateY(0)';
+            bottomThird.style.transform = 'translateY(0)';
+            
+            topThird.style.opacity = '1';
+            topThird.style.visibility = 'visible';
+            middleThird.style.opacity = '1';
+            middleThird.style.visibility = 'visible';
+            bottomThird.style.opacity = '1';
+            bottomThird.style.visibility = 'visible';
+
+            audioControl.style.opacity = '0';
+            audioControl.style.visibility = 'hidden';
+            audioPlayer.pause();
+
+            setTimeout(() => {
+                fullImage1.style.opacity = '0';
+                fullImage1.style.visibility = 'hidden';
+                fullImage2.style.opacity = '0';
+                fullImage2.style.visibility = 'hidden';
+                fullImage3.style.opacity = '0';
+                fullImage3.style.visibility = 'hidden';
+                }, 1200); // Match the duration of the transition
+            backButton.style.opacity = '0';
+            backButton.style.visibility = 'hidden';
+            
+        }
+
+
+        // Toggling the audio via click
+        audioControl.addEventListener('click', toggleAudio);
+        // Change back to Play icon if done.
+        audioPlayer.addEventListener('ended', function() {
+            audioControl.innerHTML = "&#9658;"; // Change back to play icon
+        });
+        // Function to reveal the back button
+        function showBackButton() {
+            backButton.style.opacity = '1';
+            backButton.style.visibility = 'visible';
+        }
+
+        // Click event for top third (image 1)
+        topThird.addEventListener('click', function() {
+            //resetSections(); // Reset all sections first
+            fullImage1.style.opacity = '1';
+            fullImage1.style.visibility = 'visible';
+            
+            setTimeout(() => {
+                topThird.style.transition = 'opacity 0.5s ease-in-out';
+                topThird.style.opacity = '0';
+                setTimeout(() => {
+                    topThird.style.visibility = 'hidden';
+                }, 500);
+    
+                middleThird.style.transition = 'transform 0.9s ease-in-out';
+                bottomThird.style.transition = 'transform 1.2s ease-in-out'; // Move bottom slower
+    
+                middleThird.style.transform = 'translateY(100vh)'; // Move middle third down
+                bottomThird.style.transform = 'translateY(100vh)'; // Move bottom third down
+            }, 30);
+            
+            audioPlayer.src = audioSources.top; // Change audio source
+            setTimeout(() => {  // Make player visible
+                audioControl.style.opacity = '1';
+                audioControl.style.visibility = 'visible';
+            }, 900);
+            showBackButton(); // Show back button
+        });
+
+        // Click event for middle third (image 2)
+        middleThird.addEventListener('click', function() {
+            //resetSections(); // Reset all sections first
+            fullImage2.style.opacity = '1';
+            fullImage2.style.visibility = 'visible';
+
+            setTimeout(() => {
+                middleThird.style.transition = 'opacity 0.5s ease-in-out';
+                middleThird.style.opacity = '0';
+                setTimeout(() => {
+                    middleThird.style.visibility = 'hidden';
+                }, 500);
+    
+                topThird.style.transition = 'transform 0.9s ease-in-out'; // Move top slower
+                bottomThird.style.transition = 'transform 0.9s ease-in-out';
+    
+                topThird.style.transform = 'translateY(-100vh)'; // Move top third up
+                bottomThird.style.transform = 'translateY(100vh)'; // Move bottom third down
+            }, 30);
+            audioPlayer.src = audioSources.middle; // Change audio source
+            setTimeout(() => {  // Make player visible
+                audioControl.style.opacity = '1';
+                audioControl.style.visibility = 'visible';
+            }, 900);
+            showBackButton(); // Show back button
+        });
+
+        // Click event for bottom third (image 3)
+        bottomThird.addEventListener('click', function() {
+            //resetSections(); // Reset all sections first
+            fullImage3.style.opacity = '1';
+            fullImage3.style.visibility = 'visible';
+
+            setTimeout(() => {
+                bottomThird.style.transition = 'opacity 0.5s ease-in-out';
+                bottomThird.style.opacity = '0';
+                setTimeout(() => {
+                    bottomThird.style.visibility = 'hidden';
+                }, 500);
+    
+                topThird.style.transition = 'transform 1.2s ease-in-out'; // Move top slower
+                middleThird.style.transition = 'transform 0.9s ease-in-out';
+    
+                topThird.style.transform = 'translateY(-100vh)'; // Move top third up
+                middleThird.style.transform = 'translateY(-100vh)'; // Move middle third up
+            }, 30);
+            audioPlayer.src = audioSources.bottom; // Change audio source
+            setTimeout(() => {  // Make player visible
+                audioControl.style.opacity = '1';
+                audioControl.style.visibility = 'visible';
+            }, 900);
+            showBackButton(); // Show back button
+        });
+
+        
+        // Click event for the back button to reset the view
+        backButton.addEventListener('click', function() {
+            resetSections(); // Reset everything
+        });
+    </script>
+</body>
+</html>
