@@ -12,8 +12,8 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: 100vh;
             color: black;
+            height: 100vh;
             overflow: hidden; /* Prevent canvas extension */
             position: relative;
         }
@@ -38,6 +38,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            text-shadow: 
+                -1px -1px 0 rgb(38, 38, 38),  
+                1px -1px 0 rgb(38, 38, 38),
+                -1px  1px 0 rgb(38, 38, 38),
+                1px  1px 0 rgb(38, 38, 38); /* Create outline effect */
             z-index: 3;
         }
 
@@ -92,7 +97,7 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            font-size: 36px;
+            font-size: 2rem;
             color: white;
             background: none;
             border: none;
@@ -111,12 +116,16 @@
             z-index: 10;
             opacity: 0;
             visibility: hidden;
-            font-size: 36px;
+            font-size: 2rem;
             color: white;
             background: none;
             border: none;
             cursor: pointer;
             transition: opacity 0.5s ease-in-out;
+        }
+        .audio-icon {
+            width: 3em; /* Relative to the font size of the parent element */
+            height: 3em; /* Maintain aspect ratio */
         }
     </style>
 </head>
@@ -138,7 +147,9 @@
     <audio id="audio-player" src="" preload="auto"></audio>
 
     <!-- Audio Control (appears after an image is clicked) -->
-    <button id="audio-control" class="audio-controls" style="opacity: 0; visibility: hidden;">&#9658;</button>
+    <button id="audio-control" class="audio-controls" style="opacity: 0; visibility: hidden;">
+        <img src="play-icon.png" alt="Play" id="audioControlIcon" class="audio-icon">
+    </button>
 
     <script>
         // Get references to the cropped sections, full images, and back button
@@ -152,7 +163,8 @@
 
         const backButton = document.getElementById('back-button');
 
-        const audioControl = document.getElementById('audio-control');
+        const audioControl = document.getElementById('audio-control')
+        const audioControlIcon = document.getElementById('audioControlIcon');
         const audioPlayer = document.getElementById('audio-player');
 
         // Define audio sources for each section
@@ -165,10 +177,10 @@
         function toggleAudio() {
             if (audioPlayer.paused) {
                 audioPlayer.play();
-                audioControl.innerHTML = "&#10074;&#10074;"; // Change to pause icon
+                audioControlIcon.src = 'pause-icon.png'; // Change to pause icon
             } else {
                 audioPlayer.pause();
-                audioControl.innerHTML = "&#9658;"; // Change to play icon
+                audioControlIcon.src = 'play-icon.png'; // Change to play icon
             }
         }
 
@@ -189,7 +201,7 @@
             audioControl.style.opacity = '0';
             audioControl.style.visibility = 'hidden';
             audioPlayer.pause();
-            audioControl.innerHTML = "&#9658;"; // Change to play icon
+            audioControlIcon.src = 'play-icon.png'; // Change to play icon
 
             setTimeout(() => {
                 fullImage1.style.opacity = '0';
@@ -209,7 +221,7 @@
         audioControl.addEventListener('click', toggleAudio);
         // Change back to Play icon if done.
         audioPlayer.addEventListener('ended', function() {
-            audioControl.innerHTML = "&#9658;"; // Change back to play icon
+            audioControlIcon.src = 'play-icon.png'; // Change to play icon
         });
         // Function to reveal the back button
         function showBackButton() {
@@ -238,6 +250,7 @@
             }, 30);
             
             audioPlayer.src = audioSources.top; // Change audio source
+
             setTimeout(() => {  // Make player visible
                 audioControl.style.opacity = '1';
                 audioControl.style.visibility = 'visible';
@@ -264,6 +277,7 @@
                 topThird.style.transform = 'translateY(-100vh)'; // Move top third up
                 bottomThird.style.transform = 'translateY(100vh)'; // Move bottom third down
             }, 30);
+
             audioPlayer.src = audioSources.middle; // Change audio source
             setTimeout(() => {  // Make player visible
                 audioControl.style.opacity = '1';
@@ -291,6 +305,7 @@
                 topThird.style.transform = 'translateY(-100vh)'; // Move top third up
                 middleThird.style.transform = 'translateY(-100vh)'; // Move middle third up
             }, 30);
+
             audioPlayer.src = audioSources.bottom; // Change audio source
             setTimeout(() => {  // Make player visible
                 audioControl.style.opacity = '1';
